@@ -113,7 +113,7 @@ public class Researchers {
 					
 					 // Add into the html table
 					 output += "<tr><td><input id='hidRIDUpdate' "
-					 		+ "name='hidResearcherIdUpdate'"
+					 		+ "name='hidRIDUpdate'"
 					 		+ "type='hidden' value='" + RID + "'>" 
 					 		+ rName + "</td>";
 					 output += "<td>" + rPhone + "</td>";
@@ -126,9 +126,8 @@ public class Researchers {
 					 output += "<td><input name='btnUpdate' "
 					 		+ "type='button' value='Update'"
 					 		+ "class='btnUpdate btn btn-secondary'</td>"
-					 		+ " data-rid='" + RID +"'></td>"
 					 + "<td><input name='btnRemove' type='button' value='Remove'"
-					 + "class='btnRemove btn btn-danger' data-rid='" +RID+ "'></td></tr>";
+					 + "class='btnRemove btn btn-danger' data-rid='" +RID+ "'> " + "</td></tr>";
 				}
 					 con.close();
 					
@@ -218,7 +217,7 @@ public class Researchers {
 				 catch (Exception e)
 				 {
 					 output = "{\"status\":\"error\", \"data\": \"" +
-							 RID+ "\"}";
+					             "\"Error while deleting the researcher.\"}";
 					 System.err.println(e.getMessage());
 				 }
 				 return output;

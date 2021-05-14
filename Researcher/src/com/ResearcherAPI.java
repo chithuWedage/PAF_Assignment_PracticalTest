@@ -69,7 +69,7 @@ public class ResearcherAPI extends HttpServlet
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		System.out.println("Researcher API");
-		String output = researcherObj.insertResearcher(request.getParameter("RID"), 
+		String output = researcherObj.insertResearcher( 
 									request.getParameter("rName"), 
 									request.getParameter("rPhone"),
 									request.getParameter("rEmail"), 

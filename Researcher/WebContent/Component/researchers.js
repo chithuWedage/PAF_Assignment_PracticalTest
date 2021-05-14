@@ -32,8 +32,8 @@ $(document).on("click", "#btnSave", function(event)
 		$("#alertError").hide();
 		
 		// Form validation-------------------
-		//var status = validateForm(); 
-		var status = true;
+		var status = validateResearcherForm();
+		var status = true; 
 		
 		if (status != true)
 		{
@@ -63,7 +63,7 @@ $(document).on("click", "#btnSave", function(event)
 // UPDATE==========================================
 $(document).on("click", ".btnUpdate", function(event) 
 {
-		$("#hidRIDSave").val($(this).closet("tr").find('#hidResearcherIdUpdate').val());
+		$("#hidRIDSave").val($(this).data("rid"));
 		$("#rName").val($(this).closest("tr").find('td:eq(0)').text()); 
 		$("#rPhone").val($(this).closest("tr").find('td:eq(1)').text()); 
 		$("#rAddress").val($(this).closest("tr").find('td:eq(2)').text()); 
@@ -114,7 +114,8 @@ function validateResearcherForm()
 	return true;
 }
 
-function validateForm() {
+function validateForm() 
+{
 
 	 var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
 	 var emailval = $("#email2").val();
@@ -141,29 +142,29 @@ function onResearcherSaveComplete(response, status)
 	if (status == "success") 
 	{
 		var resultSet = JSON.parse(response);
-		if (resultSet.status.trim() == "success") {
+		
+		if (resultSet.status.trim() == "success") 
+		{
 			$("#alertSuccess").text("Successfully saved.");
 			$("#alertSuccess").show();
+			
 			$("#divresearcherGrid").html(resultSet.data);
-			$("#hidRIDSave").val("");
-			$("#formResearcher")[0].reset();
-			//$("#hidPaymentIDSave2").val("");
-			//$("#formItem2")[0].reset();
-		} else if (resultSet.status.trim() == "error") {
+			
+			
+		} else if (resultSet.status.trim() == "error") 
+		{
 			$("#alertError").text(resultSet.data);
 			$("#alertError").show();
-		} else if(resultSet.status.trim() == "AuthError") {
-			$("#alertError").text("Authentication Error");
-			$("#alertError").show();
-		}
-	} else if (status == "error") {
+			
+	} else if (status == "error") 
+	{
 			$("#alertError").text("Error while saving.");
 			$("#alertError").show();
 	} else 
-		{
-			$("#alertError").text("Unknown Error Occured");
+	{
+			$("#alertError").text("Unknown Error Occured...");
 			$("#alertError").show();
-		}
+	}
 				
 		$("#hidRIDSave").val(""); 
 		$("#formResearcher")[0].reset();	
@@ -196,6 +197,7 @@ function onResearcherDeleteComplete(response, status)
 		{
 			$("#alertSuccess").text("Successfully deleted."); 
 			$("#alertSuccess").show();
+			
 			$("#divresearcherGrid").html(resultSet.data); 
 		} else if (resultSet.status.trim() == "error") 
 		{
@@ -212,6 +214,7 @@ function onResearcherDeleteComplete(response, status)
 
 		$("#alertError").text("Unknown error while deleting.."); 
 		$("#alertError").show();
+	}
 	}
 }
 
