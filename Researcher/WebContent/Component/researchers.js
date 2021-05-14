@@ -23,7 +23,7 @@ $(document).on("click", "#insertArea", function(event) {
 });
 
 // SAVE ============================================
-$(document).on("click", "#btnSubmit", function(event) 
+$(document).on("click", "#btnSave", function(event) 
 {
 		// Clear alerts---------------------
 		$("#alertSuccess").text(""); 
@@ -32,7 +32,9 @@ $(document).on("click", "#btnSubmit", function(event)
 		$("#alertError").hide();
 		
 		// Form validation-------------------
-		var status = validateForm(); 
+		//var status = validateForm(); 
+		var status = true;
+		
 		if (status != true)
 		{
 			$("#alertError").text(status); 
@@ -61,7 +63,7 @@ $(document).on("click", "#btnSubmit", function(event)
 // UPDATE==========================================
 $(document).on("click", ".btnUpdate", function(event) 
 {
-		$("#hidRIDSave").val($(this).data("Rid").find('#hidResearcherIdUpdate').val());
+		$("#hidRIDSave").val($(this).closet("tr").find('#hidResearcherIdUpdate').val());
 		$("#rName").val($(this).closest("tr").find('td:eq(0)').text()); 
 		$("#rPhone").val($(this).closest("tr").find('td:eq(1)').text()); 
 		$("#rAddress").val($(this).closest("tr").find('td:eq(2)').text()); 
@@ -90,7 +92,7 @@ function validateResearcherForm()
 	if ($("#rAddress").val().trim() == "") {
 	return "Insert Researcher postal address.";
 	}
-	if ($("#email").val().trim() == ""){
+	if ($("#rEmail").val().trim() == ""){
 		return "Insert Email";
 	}
 	if (!emailReg.test(emailval)) {
@@ -175,7 +177,7 @@ $(document).on("click", ".btnRemove", function(event)
 	{
 		url : "ResearcherAPI",
 		type : "DELETE",
-		data : "RID=" + $(this).data("Rid"),
+		data : "RID=" + $(this).data("rid"),
 		dataType : "text",
 		complete : function(response, status) 
 		{

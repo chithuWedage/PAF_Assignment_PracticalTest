@@ -1,6 +1,5 @@
 package com;
  
-import model.ResearcherMain;
 import model.Researchers;
 //For REST Service ----
 import javax.ws.rs.*;
@@ -30,7 +29,7 @@ public class ResearcherService {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String insertResearcher(@FormParam("RID") String RID,
+	public String insertResearcher(@FormParam("RID") int RID,
 			@FormParam("rName") String rName,
 			@FormParam("rPhone") String rPhone,
 			@FormParam("rEmail") String rEmail,
@@ -39,16 +38,16 @@ public class ResearcherService {
 			@FormParam("rCost") String rCost) {
 		
 		System.out.println("CREATE RESEARCHER");
-		ResearcherMain rs = new  ResearcherMain();
-		rs.setRId(RID);
-		rs.setProjectName(projectName);
-		rs.setrPhone(rPhone);
-		rs.setrEmail(rEmail);
-		rs.setrAddress(rAddress);
-		rs.setrCost(rCost);
-		rs.setrName(rName);
+//		ResearcherMain rs = new  ResearcherMain();
+//		rs.setRId(RID);
+//		rs.setProjectName(projectName);
+//		rs.setrPhone(rPhone);
+//		rs.setrEmail(rEmail);
+//		rs.setrAddress(rAddress);
+//		rs.setrCost(rCost);
+//		rs.setrName(rName);
 	
-		String output = researcherObj.insertResearcher(RID,rName, rPhone, rEmail, rAddress, projectName, rCost);
+		String output = researcherObj.insertResearcher(rName, rPhone, rEmail, rAddress, projectName, rCost);
 		return output;
 	}
 	

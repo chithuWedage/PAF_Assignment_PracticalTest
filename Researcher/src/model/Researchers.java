@@ -26,7 +26,7 @@ public class Researchers {
 			
 		
 			//-------insert------
-			public String insertResearcher(String RID,String rName, String rPhone, String rEmail, String rAddress, String projectName, String rCost)
+			public String insertResearcher(String rName, String rPhone, String rEmail, String rAddress, String projectName, String rCost)
 			{
 				String output = "";
 				try
@@ -46,7 +46,7 @@ public class Researchers {
 					PreparedStatement preparedStmt = con.prepareStatement(query);
 					
 					// binding values
-					preparedStmt.setString(1, RID);
+					preparedStmt.setInt(1, 0);
 					preparedStmt.setString(2, rName);
 					preparedStmt.setString(3, rPhone);
 					preparedStmt.setString(4, rEmail);
@@ -113,8 +113,8 @@ public class Researchers {
 					
 					 // Add into the html table
 					 output += "<tr><td><input id='hidRIDUpdate' "
-					 		+ "name='hidResearcherIdUpdate'\n"
-					 		+ "type='hidden' value='\" + RID + \"'>\"" 
+					 		+ "name='hidResearcherIdUpdate'"
+					 		+ "type='hidden' value='" + RID + "'>" 
 					 		+ rName + "</td>";
 					 output += "<td>" + rPhone + "</td>";
 					 output += "<td>" + rEmail + "</td>";
@@ -125,10 +125,10 @@ public class Researchers {
 					 // buttons
 					 output += "<td><input name='btnUpdate' "
 					 		+ "type='button' value='Update'"
-					 		+ "class='btnUpdate btn-secondary' data-rid='" + RID +"'></td>"
-					 + "<td><input name='btnRemove' type='button' value='Remove'class='btnRemove btn btn-danger'>"
-					 + "<input name='hidRIDDelete' id='RID' name='RID' data-RID='"+RID+"' type='hidden' value='" + RID
-					 + "'>" + "</form></td></tr>";
+					 		+ "class='btnUpdate btn btn-secondary'</td>"
+					 		+ " data-rid='" + RID +"'></td>"
+					 + "<td><input name='btnRemove' type='button' value='Remove'"
+					 + "class='btnRemove btn btn-danger' data-rid='" +RID+ "'></td></tr>";
 				}
 					 con.close();
 					
@@ -162,13 +162,12 @@ public class Researchers {
 					 PreparedStatement preparedStmt = con.prepareStatement(query);
 					
 					 // binding values
-					 preparedStmt.setString(1, RID);
-					 preparedStmt.setString(2, rName);
-					 preparedStmt.setString(3, rPhone);
-					 preparedStmt.setString(4, rEmail);
-					 preparedStmt.setString(5, rAddress);
-					 preparedStmt.setString(6, projectName);
-					 preparedStmt.setDouble(7, Double.parseDouble(rCost));
+					 preparedStmt.setString(1, rName);
+					 preparedStmt.setString(2, rPhone);
+					 preparedStmt.setString(3, rEmail);
+					 preparedStmt.setString(4, rAddress);
+					 preparedStmt.setString(5, projectName);
+					 preparedStmt.setDouble(6, Double.parseDouble(rCost));
 					 preparedStmt.setInt(7, Integer.parseInt(RID));
 					
 					 // execute the statement
