@@ -1,5 +1,6 @@
 package com;
  
+import model.ResearcherMain;
 import model.Researchers;
 //For REST Service ----
 import javax.ws.rs.*;
@@ -13,30 +14,41 @@ import org.jsoup.*;
 import org.jsoup.parser.*;
 import org.jsoup.nodes.Document;
 
-@Path("/Researcher")
+@Path("/Researchers")
 public class ResearcherService {
 	
-	Researchers researchObj = new Researchers();
+	Researchers researcherObj = new Researchers();
 	@GET
 	@Path("/")
-	@Produces(MediaType.TEXT_HTML)
-	public String readResearch()
+	@Produces(MediaType.TEXT_PLAIN)
+	public String readResearcher()
 	{
-		return researchObj.readResearcher();
+		return researcherObj.readResearcher();
 	}
 	
 	@POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String insertResearch(@FormParam("rName") String rName,
+	public String insertResearcher(@FormParam("RID") String RID,
+			@FormParam("rName") String rName,
 			@FormParam("rPhone") String rPhone,
 			@FormParam("rEmail") String rEmail,
 			@FormParam("rAddress") String rAddress,
 			@FormParam("projectName") String projectName,
-			@FormParam("rCost") String rCost)
-	{
-		String output = researchObj.insertResearcher(rName, rPhone, rEmail, rAddress, projectName, rCost);
+			@FormParam("rCost") String rCost) {
+		
+		System.out.println("CREATE RESEARCHER");
+		ResearcherMain rs = new  ResearcherMain();
+		rs.setRId(RID);
+		rs.setProjectName(projectName);
+		rs.setrPhone(rPhone);
+		rs.setrEmail(rEmail);
+		rs.setrAddress(rAddress);
+		rs.setrCost(rCost);
+		rs.setrName(rName);
+	
+		String output = researcherObj.insertResearcher(RID,rName, rPhone, rEmail, rAddress, projectName, rCost);
 		return output;
 	}
 	
@@ -44,7 +56,7 @@ public class ResearcherService {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String updateResearch(String researchData)
+	public String updateResearcher(String researchData)
 	{
 		//Convert the input string to a JSON object
 		JsonObject researchObject = new JsonParser().parse(researchData).getAsJsonObject();
@@ -56,7 +68,7 @@ public class ResearcherService {
 		String rAddress = researchObject.get("rAddress").getAsString();
 		String projectName = researchObject.get("projectName").getAsString();
 		String rCost = researchObject.get("rCost").getAsString();
-		String output = researchObj.updateResearcher(RID, rName, rPhone, rEmail, rAddress,projectName, rCost);
+		String output = researcherObj.updateResearcher(RID, rName, rPhone, rEmail, rAddress,projectName, rCost);
 		return output;
 	}
 	
@@ -64,13 +76,13 @@ public class ResearcherService {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String deleteResearch(String researchData)
+	public String deleteResearcher(String researcherData)
 	{
 		//Convert the input string to an XML document
-		Document doc = Jsoup.parse(researchData, "", Parser.xmlParser());
+		Document doc = Jsoup.parse(researcherData, "", Parser.xmlParser());
 		//Read the value from the element <itemID>
 		String RID = doc.select("RID").text();
-		String output = researchObj.deleteResearcher(RID);
+		String output = researcherObj.deleteResearcher(RID);
 		return output;
 	}
 	

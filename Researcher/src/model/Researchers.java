@@ -7,23 +7,26 @@ public class Researchers {
 			private Connection connect()
 			{
 				Connection con = null;
-			try
-			{
-					Class.forName("com.mysql.jdbc.Driver");
-					//Provide the correct details: DBServer/DBName, username, password
-					con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/researcher", "root", "");
+			
+				try
+				{
+						Class.forName("com.mysql.jdbc.Driver");
+						//Provide the correct details: DBServer/DBName, username, password
+						con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/researcher", "root", "");
+						
+						
+				}
 					
-					
-			}
-				
-			catch (Exception e)
-				{e.printStackTrace();}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
 				return con;
 			}
 			
 		
 			//-------insert------
-			public String insertResearcher(String rName, String rPhone, String rEmail, String rAddress, String projectName, String rCost)
+			public String insertResearcher(String RID,String rName, String rPhone, String rEmail, String rAddress, String projectName, String rCost)
 			{
 				String output = "";
 				try
@@ -37,13 +40,13 @@ public class Researchers {
 					
 					// create a prepared statement
 					String query = " insert into researcher"
-							+ "			(`RID`,`rName`,`rPhone`,`rEmail`,`rAddress`,`projectName`,`rCost`)"
+							+ "	(RID,rName,rPhone,rEmail,rAddress,projectName,rCost)"
 							+ " values (?, ?, ?, ?, ?, ?, ?)";
 					
 					PreparedStatement preparedStmt = con.prepareStatement(query);
 					
 					// binding values
-					preparedStmt.setInt(1, 0);
+					preparedStmt.setString(1, RID);
 					preparedStmt.setString(2, rName);
 					preparedStmt.setString(3, rPhone);
 					preparedStmt.setString(4, rEmail);
@@ -53,13 +56,16 @@ public class Researchers {
 
 					// execute the statement
 					preparedStmt.execute();
-					con.close();
 					
-					output = "Inserted successfully";
+					
+					String newResearchers = readResearcher();
+					output = "{\"status\":\"success\", \"data\": \"" + newResearchers + "\"}";
 				}
 				catch (Exception e)
 				{
-					output = "Error while inserting the researcher.";
+					
+					output = "{\"status\":\"error\", \"data\":\"Error while inserting the researcher.\"}";
+					
 					System.err.println(e.getMessage());
 				}
 				return output;
@@ -78,15 +84,17 @@ public class Researchers {
 				 if (con == null)
 				 {
 					 return "Error while connecting to the database for reading."; 
-				}
+				  }
 			
 				// Prepare the html table to be displayed
-				 output = "<table border='1'><tr><th>Research Name</th><th>Phone</th>" +
-							 "<th>Email</th>" +
-							 "<th>Address</th>" +
+				 output = "<table border='1'><tr><th>Researcher Name</th>" +
+				 			 "<th>Work Phone</th>" +
+							 "<th>Email Address</th>" +
+							 "<th>Postal Address</th>" +
 							 "<th>Project Name</th>" +
 							 "<th>Cost</th>" +
-							 "<th>Update</th><th>Remove</th></tr>";
+							 "<th>Update</th>" +
+							 "<th>Remove</th></tr>";
 	
 				 String query = "select * from researcher";
 				 Statement stmt = con.createStatement();
@@ -104,7 +112,10 @@ public class Researchers {
 					 String rCost = Double.toString(rs.getDouble("rCost"));
 					
 					 // Add into the html table
-					 output += "<tr><td>" + rName + "</td>";
+					 output += "<tr><td><input id='hidRIDUpdate' "
+					 		+ "name='hidResearcherIdUpdate'\n"
+					 		+ "type='hidden' value='\" + RID + \"'>\"" 
+					 		+ rName + "</td>";
 					 output += "<td>" + rPhone + "</td>";
 					 output += "<td>" + rEmail + "</td>";
 					 output += "<td>" + rAddress + "</td>";
@@ -112,10 +123,11 @@ public class Researchers {
 					 output += "<td>" + rCost + "</td>";
 					
 					 // buttons
-					 output += "<td><input name='btnUpdate' type='button' value='Update'class='btn btn-secondary'></td>"
-					 + "<td><form method='post' action='researchers.jsp'>"
-					 + "<input name='btnRemove' type='submit' value='Remove'class='btn btn-danger'>"
-					 + "<input name='RID' type='hidden' value='" + RID
+					 output += "<td><input name='btnUpdate' "
+					 		+ "type='button' value='Update'"
+					 		+ "class='btnUpdate btn-secondary' data-rid='" + RID +"'></td>"
+					 + "<td><input name='btnRemove' type='button' value='Remove'class='btnRemove btn btn-danger'>"
+					 + "<input name='hidRIDDelete' id='RID' name='RID' data-RID='"+RID+"' type='hidden' value='" + RID
 					 + "'>" + "</form></td></tr>";
 				}
 					 con.close();
@@ -140,29 +152,36 @@ public class Researchers {
 				 {
 					 Connection con = connect();
 					 if (con == null)
-					 {return "Error while connecting to the database for updating."; }
+					 {
+						 return "Error while connecting to the database for updating."; 
+					 }
 					
 					 // create a prepared statement
 					 String query = "UPDATE researcher SET rName=?,rPhone=?,rEmail=?,rAddress=?,projectName=?,rCost=? WHERE RID=?";
+					 
 					 PreparedStatement preparedStmt = con.prepareStatement(query);
 					
 					 // binding values
-					 preparedStmt.setString(1, rName);
-					 preparedStmt.setString(2, rPhone);
-					 preparedStmt.setString(3, rEmail);
-					 preparedStmt.setString(4, rAddress);
-					 preparedStmt.setString(5, projectName);
-					 preparedStmt.setDouble(6, Double.parseDouble(rCost));
+					 preparedStmt.setString(1, RID);
+					 preparedStmt.setString(2, rName);
+					 preparedStmt.setString(3, rPhone);
+					 preparedStmt.setString(4, rEmail);
+					 preparedStmt.setString(5, rAddress);
+					 preparedStmt.setString(6, projectName);
+					 preparedStmt.setDouble(7, Double.parseDouble(rCost));
 					 preparedStmt.setInt(7, Integer.parseInt(RID));
 					
 					 // execute the statement
 					 preparedStmt.execute();
 					 con.close();
-					 output = "Updated successfully";
+					 
+					 String newResearchers = readResearcher();
+					 output = "{\"status\":\"success\", \"data\": \"" +
+							 newResearchers + "\"}";
 				 }
 				 catch (Exception e)
 				 {
-					 output = "Error while updating the researcher.";
+					 output = "{\"status\":\"error\", \"data\":\"Error while updating the researcher.\"}";
 					 System.err.println(e.getMessage());
 				 }
 				 return output;
@@ -193,11 +212,14 @@ public class Researchers {
 					 preparedStmt.execute();
 					 con.close();
 					 
-					 output = "Deleted successfully";
+					 String newResearchers = readResearcher();
+					 output = "{\"status\":\"success\", \"data\": \"" +
+							 newResearchers + "\"}";
 				 }
 				 catch (Exception e)
 				 {
-					 output = "Error while deleting the researcher.";
+					 output = "{\"status\":\"error\", \"data\": \"" +
+							 RID+ "\"}";
 					 System.err.println(e.getMessage());
 				 }
 				 return output;
